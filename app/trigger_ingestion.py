@@ -1,0 +1,2 @@
+#daily
+#trigger on thresholds
