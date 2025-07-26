@@ -1,0 +1,2 @@
+#trigger on thresholds
+#weekly

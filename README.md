@@ -17,8 +17,9 @@ CleanWater AI is an end-to-end machine learning system for monitoring and predic
 
 **Primary Data Sources:**
 1. **WPDx (Water Point Data Exchange)**: 22,000+ water points across Kenya with location, status, and infrastructure data
-2. **Google Earth Engine**: Environmental satellite data including NDVI, rainfall, temperature, soil moisture
-3. **User Input**: Citizen reports on water quality observations (color, clarity, odor, infrastructure)
+2. **GEMS (Global Environment Monitoring System)**: Water quality measurements including mercury and zinc contamination levels
+3. **Google Earth Engine**: Environmental satellite data including NDVI, rainfall, temperature, soil moisture
+4. **User Input**: Citizen reports on water quality observations (color, clarity, odor, infrastructure)
 
 **Output Formats:**
 - **Interactive Dashboard**: Streamlit web application with maps, charts, and alerts
@@ -32,7 +33,7 @@ CleanWater AI is an end-to-end machine learning system for monitoring and predic
 Data Extraction → Data Processing → Model Training → Deployment → Monitoring
      ↓                ↓               ↓            ↓           ↓
    WPDx API      →  Cleaning     →  XGBoost    →  Streamlit  →  Alerts
-   GEE API       →  Merging      →  NLP Model  →  Live API   →  Updates
+   Gems/GE       →  Merging      →  NLP Model  →  Live API   →  Reports
    User Input    →  Feature Eng  →  Evaluation →  Dashboard  →  Feedback
 ```
 
@@ -45,14 +46,18 @@ cleanwaterai/
 │   ├── trigger_ingestion.py                      # Live data ingestion scheduler
 │   ├── trigger_predictions.py                    # Real-time prediction engine
 │   ├── trigger_alerts.py                         # Alert notification system
-│   └── index.css                                 # Dashboard styling
+│   ├── trigger_reports.py                        # Minimal queried CSVs for specific purposes
 │
 ├── 📁 data/                                      # Data storage hierarchy
 │   ├── raw/                                      # Original source data
 │   │   ├── wpdx_kenya.csv                        # Water Point Data Exchange (22K points)
-│   │   └── ndvi_scaled.csv                       # Satellite environmental data
+│   │   ├── ndvi_scaled.csv                       # Satellite environmental data
+│   │   ├── mercury.csv                           # GEMS mercury contamination data
+│   │   └── zinc.csv                              # GEMS zinc contamination data
 │   └── processed/                                # Cleaned, merged datasets
-│       └── final_wpdx_environmental_data.csv     # ML-ready dataset
+│       ├── environmental.csv                     # Processed environmental features
+│       ├── gems.csv                              # Processed GEMS water quality data
+│       └── nlp.csv                               # Processed text analysis data
 │
 ├── 📁 scripts/                                   # Core data pipeline scripts
 │   ├── extract_data.py                           # WPDx API data extraction
@@ -96,6 +101,7 @@ cleanwaterai/
 **1. Data Ingestion Pipeline:**
 ```
 WPDx API → extract_data.py → data/raw/wpdx_kenya.csv
+GEMS → mercury/zinc processing → data/raw/mercury.csv, data/raw/zinc.csv
 GEE API → satellite processing → data/raw/ndvi_scaled.csv
 User Input → streamlit_app.py → real-time processing
 ```
@@ -137,12 +143,19 @@ git clone https://github.com/TonnieD/CleanWatAI.git
 cd cleanwatai
 ```
 
-2. **Install Package in Development Mode:**
+2. Create a pyproject.toml file with the following content:
+```toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+```
+
+3. **Install Package in Development Mode:**
 ```bash
 pip install -e .
 ```
 
-3. **Install Dependencies:**
+4. **Install Dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
