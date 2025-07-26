@@ -137,12 +137,19 @@ git clone https://github.com/TonnieD/CleanWatAI.git
 cd cleanwatai
 ```
 
-2. **Install Package in Development Mode:**
+2. Create a pyproject.toml file with the following content:
+```toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+```
+
+3. **Install Package in Development Mode:**
 ```bash
 pip install -e .
 ```
 
-3. **Install Dependencies:**
+4. **Install Dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
