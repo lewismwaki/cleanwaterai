@@ -1,0 +1,93 @@
+# Byte-compiled / optimized / DLL files
+
+**pycache**/
+\*.py\[cod]
+\*\$py.class
+__pycache\_\_/
+
+# C extensions
+
+\*.so
+
+# Packages
+
+\*.egg
+\*.egg-info/
+dist/
+build/
+
+# Installer logs
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+\*,cover
+.pytest\_cache/
+
+# Jupyter Notebook checkpoints
+
+.ipynb\_checkpoints/
+
+# Virtual environments
+
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+.env.\*
+
+# Editor directories and files
+
+.vscode/
+.idea/
+\*.sublime-project
+\*.sublime-workspace
+
+# macOS files
+
+.DS\_Store
+
+# Logs and logs directories
+
+logs/
+\*.log
+
+# Data directories to ignore
+
+# (keep raw data under version control if desired)
+
+# data/raw/
+
+data/interim/
+# data/processed/
+data/external/
+
+# Model artifacts
+
+# models/
+# \*.pkl
+# \*.joblib
+# \*.h5
+
+# Temporary files
+
+\*.tmp
+\*.temp
+
+# Workspace files
+
+\*.swp
+
+# Ignore generated CSV outputs
+
+# wpdx\_kenya.csv
+# \*.csv
