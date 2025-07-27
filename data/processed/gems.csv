@@ -1,1 +1,2 @@
 GEMS.Station.Number;Sample.Date;Sample.Time;Depth;Analysis.Method.Code;Value.Flags;Unit;Data.Quality;Value.Dissolved;Value.Total
+# gemstationid, zinc_dis zinc_tot mercury_dis mercury_tot flouride_dis flouride_tot lead_dis lead_tot phosphate_dis phosphate_tot
