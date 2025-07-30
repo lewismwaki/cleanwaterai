@@ -4,7 +4,7 @@ import numpy as np
 
 # Config
 st.set_page_config(
-    page_title="CleanWater AI",
+    page_title="CleanWatAI",
     page_icon="💧",
     layout="wide",
     initial_sidebar_state="collapsed"
