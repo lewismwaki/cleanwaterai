@@ -13,7 +13,7 @@ st.set_page_config(
 # Header section
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.title("💧 CleanWater AI", width= "stretch")
+    st.title("💧 CleanWatAI", width= "stretch")
     st.subheader("What do you want to know about your local water quality?")
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
