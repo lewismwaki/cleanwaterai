@@ -41,6 +41,12 @@ with col2:
     col1, col2, col3 = st.columns(3)
     with col3:
         st.button("Submit", type="primary", use_container_width=True)
+        #if st.button("Submit", type="primary", use_container_width=True):
+            #if user_text.strip() == "":
+                #st.warning("Please describe your concern in the text area above.")
+            #else:
+                #prediction = nlp_pipeline.predict([user_text])[0]
+                #st.markdown(f"### 🧪 Water Safety Prediction: **{prediction}**")
 
 st.markdown("<br><br><br>", unsafe_allow_html=True)
 
