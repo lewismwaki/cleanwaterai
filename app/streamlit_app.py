@@ -1,8 +1,11 @@
 import streamlit as st
-import sklearn
+#import sklearn
 import pandas as pd
 import numpy as np
 import joblib
+import pydeck as pdk
+import matplotlib.pyplot as plt
+import seaborn as sns
 import nltk
 from pathlib import Path
 from nltk.stem import WordNetLemmatizer
@@ -49,7 +52,9 @@ def clean_texts(texts):
 
 # Models and pipeline loading
 model_path = Path(__file__).parent / "models" / "nlp_pipeline.pkl"
-nlp_pipeline = joblib.load(model_path)
+nlp_pipeline = joblib.load(model_path) # NLP model
+
+model = joblib.load("../models/environmental.pkl") # Environmental model
 
 # Config
 st.set_page_config(

@@ -7,3 +7,5 @@ shapely==2.0.1
 joblib==1.2.0
 nltk==3.8.1
 scikit-learn==1.2.2
+imbalanced-learn
+xgboost
