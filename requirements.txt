@@ -1,6 +1,6 @@
 streamlit
 pandas==1.5.3
-numpy==1.23.5
+numpy==1.26.0
 plotly==5.15.0
 geopandas==0.13.0
 shapely==2.0.1
