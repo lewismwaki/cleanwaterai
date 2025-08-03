@@ -1,5 +1,5 @@
 import streamlit as st
-#import sklearn
+import sklearn
 import pandas as pd
 import numpy as np
 import joblib
@@ -11,6 +11,9 @@ from pathlib import Path
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import re
+
+#import sklearn
+#print("✅ Scikit-learn version in Streamlit app:", sklearn.__version__)
 
 # Download necessary NLTK resources
 nltk.download('stopwords', quiet=True)
@@ -54,7 +57,8 @@ def clean_texts(texts):
 model_path = Path(__file__).parent / "models" / "nlp_pipeline.pkl"
 nlp_pipeline = joblib.load(model_path) # NLP model
 
-model = joblib.load("../models/environmental.pkl") # Environmental model
+env_model_path = Path(__file__).parent / "models" / "environmental.pkl"
+model = joblib.load(env_model_path) # Environmental model
 
 # Config
 st.set_page_config(
@@ -201,78 +205,137 @@ with st.container(border=True):
         with st.container(border=True):
             st.text("")
             
-            np.random.seed(42)  
-        nairobi_lat, nairobi_lon = -1.286389, 36.817223
-        num_points = 20
+        #Load data
+        df = pd.read_csv("../data/processed/environmental.csv")
+        df = df.dropna(subset=["latitude", "longitude"])
+        df.dropna(axis=1, how="all", inplace=True)
+
+        #Add location name
+        df["location_name"] = (
+            df["clean_adm3"].fillna("") + ", " +
+            df["clean_adm2"].fillna("") + ", " +
+            df["clean_adm1"].fillna("")
+        )
+
+        # Predict risk
+        df["predicted_risk"] = model.predict(df)
         
-        water_data = pd.DataFrame({
-            'lat': nairobi_lat + np.random.normal(0, 0.05, num_points),
-            'lon': nairobi_lon + np.random.normal(0, 0.05, num_points),
-            'quality_score': np.random.randint(0, 100, num_points),
-            'location_name': [f"Location {i+1}" for i in range(num_points)],
-            'contamination_type': np.random.choice(
-                ['Microbial', 'Chemical', 'Sediment', 'None'], 
-                num_points
-            )
+        def risk_label(r):
+            return {
+                0: "🟢 Safe Quality",
+                1: "🟡 Low Risk",
+                2: "🟠 Medium Risk",
+                3: "🔴 High Risk"
+            }.get(r, "Unknown")
+
+        def risk_color(r):
+            return {
+                0: [0, 255, 0, 160],
+                1: [255, 255, 0, 160],
+                2: [255, 165, 0, 160],
+                3: [255, 0, 0, 160]
+            }.get(r, [128, 128, 128, 160])
+
+        #print("📦 Available columns in df:", df.columns.tolist())
+        #print(df.head())
+
+        df["risk_label"] = df["predicted_risk"].apply(risk_label)
+        df["color"] = df["predicted_risk"].apply(risk_color)
+        df["risk_label_clean"] = df["risk_label"].replace({
+            "🔴 High Risk": "High Risk",
+            "🟠 Medium Risk": "Medium Risk",
+            "🟡 Low Risk": "Low Risk",
+            "🟢 Safe Quality": "Safe Quality"
         })
-        
-        def get_risk_level(score):
-            if score < 25:
-                return "High Risk 🔴"
-            elif score < 50:
-                return "Medium Risk 🟠"
-            elif score < 75:
-                return "Low Risk 🟡"
-            else:
-                return "Safe Quality 🟢"
-        
-        water_data['risk_level'] = water_data['quality_score'].apply(get_risk_level)
-        
-        def get_color(level):
-            if "High" in level:
-                return [255, 0, 0, 160] 
-            elif "Medium" in level:
-                return [255, 165, 0, 160] 
-            elif "Low" in level:
-                return [255, 255, 0, 160] 
-            else:
-                return [0, 255, 0, 160]  
-        
-        water_data['color'] = water_data['risk_level'].apply(get_color)
-        
-        risk_filter = st.multiselect(
-            "Filter by risk level:",
-            options=["High Risk 🔴", "Medium Risk 🟠", "Low Risk 🟡", "Safe Quality 🟢"],
-            default=["High Risk 🔴", "Medium Risk 🟠", "Low Risk 🟡", "Safe Quality 🟢"]
+
+        df["quality_score"] = (1 - df["predicted_risk"] / 3 * 0.75) * 100
+        df["quality_score"] = df["quality_score"].round(1)
+
+        df["risk_level"] = df["risk_label_clean"]
+
+        if "contamination_type" not in df.columns:
+            df["contamination_type"] = "Not available"
+
+
+        available_risks = sorted(df["risk_label"].unique().tolist())
+        selected_risks = st.multiselect("Filter by risk level:", available_risks, default=available_risks)
+        filtered_df = df[df["risk_label"].isin(selected_risks)]
+
+        # Handle case where no points are selected — show blank map
+        if filtered_df.empty:
+            st.info("No risk levels selected. Displaying a blank global map.")
+
+            # Set global view
+            view_state = pdk.ViewState(
+                latitude=0.0,
+                longitude=0.0,
+                zoom=1,
+                pitch=0
+            )
+
+            # Set empty DataFrame for rendering
+            filtered_df = pd.DataFrame(columns=["latitude", "longitude", "location_name", "color", "risk_label"])
+        else:
+            view_state = pdk.ViewState(
+                latitude=filtered_df["latitude"].mean(),
+                longitude=filtered_df["longitude"].mean(),
+                zoom=6,
+                pitch=0
+            )
+
+        # Build map layer
+        layer = pdk.Layer(
+            "ScatterplotLayer",
+            data=filtered_df,
+            get_position='[longitude, latitude]' if not filtered_df.empty else None,
+            get_fill_color="color" if not filtered_df.empty else None,
+            get_radius=3000,
+            pickable=True,
         )
-        
-        filtered_data = water_data[water_data['risk_level'].isin(risk_filter)]
-        st.map(filtered_data, size=20, color="color")
-        selected_point = st.selectbox(
-            "Select a monitoring point for details:",
-            options=filtered_data['location_name'].tolist()
-        )
-        
-        if selected_point:
-            point_data = filtered_data[filtered_data['location_name'] == selected_point].iloc[0]
-            
-            with st.container(border=True):
-                st.subheader("Point Details")
-                st.text("")
-                
-                detail_col1, detail_col2 = st.columns(2)
-                
-                with detail_col1:
-                    st.metric("Quality Score", f"{point_data['quality_score']}/100")
-                    st.text(f"Risk Level: {point_data['risk_level']}")
-                
-                with detail_col2:
-                    st.text(f"Contamination: {point_data['contamination_type']}")
-                    st.text(f"Location: {point_data['lat']:.4f}, {point_data['lon']:.4f}")
-                
-                st.text("")
-                st.text("")
-                st.text("")
+
+        # Tooltip definition
+        tooltip = {
+            "html": "<b>{location_name}</b><br/>"
+                    "Risk: {risk_label}<br/>"
+                    "Lat: {latitude}<br/>Lon: {longitude}",
+            "style": {"backgroundColor": "white", "color": "black"}
+        }
+
+        # Show map
+        st.pydeck_chart(pdk.Deck(
+            layers=[layer],
+            initial_view_state=view_state,
+            tooltip=tooltip
+        ))
+
+        # Point selector and detail box
+        if not filtered_df.empty:
+            selected_point = st.selectbox(
+                "Select a monitoring point for details:",
+                options=filtered_df['location_name'].tolist()
+            )
+
+            if selected_point:
+                point_data = filtered_df[filtered_df['location_name'] == selected_point].iloc[0]
+
+                with st.container(border=True):
+                    st.subheader("Point Details")
+                    st.text("")
+
+                    detail_col1, detail_col2 = st.columns(2)
+
+                    with detail_col1:
+                        st.metric("Quality Score", f"{point_data.get('quality_score', 'N/A')}/100")
+                        st.text(f"Risk Level: {point_data.get('risk_level', 'Unknown')}")
+
+                    with detail_col2:
+                        st.text(f"Contamination: {point_data.get('contamination_type', 'Not available')}")
+                        st.text(f"Location: {point_data['latitude']:.4f}, {point_data['longitude']:.4f}")
+
+                    st.text("")
+                    st.text("")
+                    st.text("")
+
             
             # Add bottom padding
             st.text("")
