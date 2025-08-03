@@ -7,6 +7,12 @@ from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import re
 
+# Download necessary NLTK resources
+nltk.download('stopwords', quiet=True)
+nltk.download('punkt', quiet=True)
+nltk.download('wordnet', quiet=True)
+nltk.download('omw-1.4', quiet=True)
+
 # Dependent functions for the nlp_pipeline
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
