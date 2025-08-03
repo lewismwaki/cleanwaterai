@@ -6,3 +6,4 @@ geopandas
 shapely
 joblib
 nltk
+scikit-learn
