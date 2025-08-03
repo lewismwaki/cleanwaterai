@@ -46,7 +46,7 @@ def clean_texts(texts):
 
 
 # Models and pipeline loading
-nlp_pipeline = joblib.load('../models/nlp_pipeline.pkl')
+nlp_pipeline = joblib.load('models/nlp_pipeline.pkl')
 
 # Config
 st.set_page_config(
