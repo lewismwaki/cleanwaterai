@@ -1,7 +1,10 @@
-streamlit==1.27.2
-pandas
-numpy
-scikit-learn
-matplotlib
+streamlit
 seaborn
 nltk
+joblib
+xgboost
+pandas
+numpy
+pydeck
+scikit-learn
+imblearn
