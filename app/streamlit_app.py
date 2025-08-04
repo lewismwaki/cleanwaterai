@@ -17,8 +17,14 @@ import re
 #print("✅ Scikit-learn version in Streamlit app:", sklearn.__version__)
 
 # Download necessary NLTK resources
-nltk.download('stopwords', quiet=True)
-nltk.download('punkt', quiet=True)
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords')
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 nltk.download('wordnet', quiet=True)
 nltk.download('omw-1.4', quiet=True)
 
