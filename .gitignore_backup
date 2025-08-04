@@ -73,10 +73,6 @@ data/external/
 
 # Model artifacts
 
-# models/
-# *.pkl
-# *.joblib
-# *.h5
 
 # Temporary files
 
@@ -89,5 +85,4 @@ data/external/
 
 Ignore generated CSV outputs
 
-# wpdx\_kenya.csv
-# *.csv
+
