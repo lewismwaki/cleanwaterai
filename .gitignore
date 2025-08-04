@@ -68,15 +68,15 @@ logs/
 # data/raw/
 
 data/interim/
-# data/processed/
+data/processed/
 data/external/
 
 # Model artifacts
 
-# models/
-# \*.pkl
-# \*.joblib
-# \*.h5
+models/
+\*.pkl
+\*.joblib
+\*.h5
 
 # Temporary files
 
@@ -87,7 +87,7 @@ data/external/
 
 \*.swp
 
-# Ignore generated CSV outputs
+Ignore generated CSV outputs
 
-# wpdx\_kenya.csv
-# \*.csv
+wpdx\_kenya.csv
+\*.csv
