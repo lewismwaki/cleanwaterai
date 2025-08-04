@@ -1,9 +1,9 @@
 streamlit
 pandas==1.5.3
-numpy==1.26.0
+numpy==1.23.5
+shapely==1.8.5
 plotly==5.15.0
 geopandas==0.13.0
-shapely==1.8.5
 joblib==1.2.0
 nltk==3.8.1
 scikit-learn==1.2.2
