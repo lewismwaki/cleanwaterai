@@ -11,8 +11,7 @@ from pathlib import Path
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 import re
-import sys
-st.write("Python version:", sys.version)
+
 
 #import sklearn
 #print("✅ Scikit-learn version in Streamlit app:", sklearn.__version__)
