@@ -18,19 +18,15 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Download necessary NLTK resources
 
-nltk.download('punkt')
-resources = [
-    ('tokenizers/punkt', 'punkt'),
-    ('corpora/stopwords', 'stopwords'),
-    ('corpora/wordnet', 'wordnet'),
-    ('corpora/omw-1.4', 'omw-1.4')
-]
+NLTK_PATH = os.path.join(os.path.expanduser("~"), "nltk_data")
+nltk.data.path.append(NLTK_PATH)
 
-for path, name in resources:
+REQUIRED_NLTK_RESOURCES = ['punkt', 'stopwords', 'wordnet', 'omw-1.4']
+for resource in REQUIRED_NLTK_RESOURCES:
     try:
-        nltk.data.find(path)
+        nltk.data.find(resource)
     except LookupError:
-        nltk.download(name, download_dir=nltk.data.path[0])
+        nltk.download(resource, download_dir=NLTK_PATH)
 
 # Then proceed to your pipeline setup
 stop_words = set(stopwords.words('english'))
