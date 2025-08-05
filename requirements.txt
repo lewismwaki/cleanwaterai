@@ -1,4 +1,5 @@
 streamlit
+scikit-learn==1.2.2
 seaborn
 nltk
 joblib
@@ -6,5 +7,4 @@ xgboost
 pandas
 numpy
 pydeck
-scikit-learn
 imblearn
