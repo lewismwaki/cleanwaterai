@@ -160,7 +160,7 @@ with col2:
         st.text("")
         
         #Load data
-        df = pd.read_csv("../data/processed/environmental.csv")
+        df = pd.read_csv("data/environmental.csv")
         df = df.dropna(subset=["latitude", "longitude"])
         df.dropna(axis=1, how="all", inplace=True)
         # Get unique locations
@@ -240,7 +240,7 @@ with st.container(border=True):
             st.text("")
             
         #Load data
-        df = pd.read_csv("../data/processed/environmental.csv")
+        df = pd.read_csv("data/environmental.csv")
         df = df.dropna(subset=["latitude", "longitude"])
         df.dropna(axis=1, how="all", inplace=True)
 
