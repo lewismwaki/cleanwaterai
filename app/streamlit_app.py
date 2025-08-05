@@ -21,20 +21,28 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Download necessary NLTK resources
 try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords')
-try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt')
-nltk.download('wordnet', quiet=True)
-nltk.download('omw-1.4', quiet=True)
+    nltk.download('punkt', quiet=True)
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords', quiet=True)
+
+try:
+    nltk.data.find('corpora/wordnet')
+except LookupError:
+    nltk.download('wordnet', quiet=True)
+
+try:
+    nltk.data.find('corpora/omw-1.4')
+except LookupError:
+    nltk.download('omw-1.4', quiet=True)
 
 # Dependent functions for the nlp_pipeline
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
-nltk.download('wordnet')
 
 #cleaning + lemmatization function
 def clean_text(text):
