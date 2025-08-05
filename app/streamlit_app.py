@@ -158,14 +158,38 @@ with col2:
     with st.container():
         st.subheader("Quick Insights")
         st.text("")
-        st.selectbox("Select Location", options=["Nairobi Central", "Nairobi West", "Nairobi East"])
+        
+        #Load data
+        df = pd.read_csv("../data/processed/environmental.csv")
+        df = df.dropna(subset=["latitude", "longitude"])
+        df.dropna(axis=1, how="all", inplace=True)
+        # Get unique locations
+        unique_locations = df["clean_adm2"].dropna().unique()
+        selected_location = st.selectbox("Select Location", sorted(unique_locations))
 
-        st.text("Monitoring Stations: 8 active")
+        # Filter by location
+        filtered_df = df[df["clean_adm2"] == selected_location]
+
+        # Risk score mapping
+        risk_labels = {
+            0: "🟢 Safe Quality",
+            1: "🟡 Low Risk",
+            2: "🟠 Medium Risk",
+            3: "🔴 High Risk"
+        }
+
+        # Calculate quick stats
+        num_stations = len(filtered_df)
+        most_common_risk = filtered_df["risk_score"].mode().iloc[0]
+        trend = "↗️ Slight increase"  # Optional: Replace with real trend logic later
+
+        # Show stats
+        st.text(f"Monitoring Stations: {num_stations} active")
         st.text("")
         st.text("Current Status:")
-        st.text("⚠️ Moderate Risk")
+        st.text(f"{risk_labels.get(most_common_risk, 'Unknown')}")
         st.text("")
-        st.text("Trend: ↗️ Slight increase")
+        st.text(f"Trend: {trend}")
         st.text("Last Updated: Today 01:03")
 with col3:
     with st.container():
@@ -216,7 +240,7 @@ with st.container(border=True):
             st.text("")
             
         #Load data
-        df = pd.read_csv("data/processed/environmental.csv")
+        df = pd.read_csv("../data/processed/environmental.csv")
         df = df.dropna(subset=["latitude", "longitude"])
         df.dropna(axis=1, how="all", inplace=True)
 
