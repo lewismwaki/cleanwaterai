@@ -14,6 +14,8 @@ import re
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+os.environ["NLTK_DATA"] = "app/nltk_data"
+
 
 
 # Ensure NLTK uses a persistent path
