@@ -7,3 +7,4 @@ pydeck
 matplotlib
 seaborn
 nltk
+imbalanced-learn
