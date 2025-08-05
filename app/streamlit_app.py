@@ -17,6 +17,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # Download necessary NLTK resources
+
+nltk.download('punkt')
 resources = [
     ('tokenizers/punkt', 'punkt'),
     ('corpora/stopwords', 'stopwords'),
