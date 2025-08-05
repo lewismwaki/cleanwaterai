@@ -16,11 +16,13 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-# Download necessary NLTK resources
-
+# Define custom nltk data directory
 NLTK_PATH = os.path.join(os.path.expanduser("~"), "nltk_data")
+
+# Add custom path to nltk's data paths
 nltk.data.path.append(NLTK_PATH)
 
+# Ensure required resources are available (download if missing)
 REQUIRED_NLTK_RESOURCES = ['punkt', 'stopwords', 'wordnet', 'omw-1.4']
 for resource in REQUIRED_NLTK_RESOURCES:
     try:
