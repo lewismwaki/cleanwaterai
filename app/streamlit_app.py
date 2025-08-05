@@ -14,34 +14,16 @@ import re
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-os.environ["NLTK_DATA"] = "app/nltk_data"
+nltk_data_path = os.path.join("app", "nltk_data")
+nltk.data.path.append(nltk_data_path)
+os.environ["NLTK_DATA"] = nltk_data_path
 
 
 
-# Ensure NLTK uses a persistent path
-NLTK_PATH = os.path.join(os.path.dirname(__file__), "nltk_data")
-if NLTK_PATH not in nltk.data.path:
-    nltk.data.path.append(NLTK_PATH)
-
-# Create the directory if it doesn't exist
-os.makedirs(NLTK_PATH, exist_ok=True)
-
-# List of required resources
-REQUIRED_NLTK_RESOURCES = [
-    ("tokenizers/punkt", "punkt"),
-    ("corpora/stopwords", "stopwords"),
-    ("corpora/wordnet", "wordnet"),
-    ("corpora/omw-1.4", "omw-1.4"),
-]
-
-# Download if not already available
-for path, name in REQUIRED_NLTK_RESOURCES:
-    try:
-        nltk.data.find(path)
-    except LookupError:
-        nltk.download(name, download_dir=NLTK_PATH)
-
-print(os.listdir(os.path.join(NLTK_PATH, "tokenizers", "punkt")))
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 # Then proceed to your pipeline setup
 stop_words = set(stopwords.words('english'))
