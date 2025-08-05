@@ -21,6 +21,9 @@ NLTK_PATH = os.path.join(os.path.dirname(__file__), "nltk_data")
 if NLTK_PATH not in nltk.data.path:
     nltk.data.path.append(NLTK_PATH)
 
+# Create the directory if it doesn't exist
+os.makedirs(NLTK_PATH, exist_ok=True)
+
 # List of required resources
 REQUIRED_NLTK_RESOURCES = [
     ("tokenizers/punkt", "punkt"),
@@ -35,6 +38,8 @@ for path, name in REQUIRED_NLTK_RESOURCES:
         nltk.data.find(path)
     except LookupError:
         nltk.download(name, download_dir=NLTK_PATH)
+
+print(os.listdir(os.path.join(NLTK_PATH, "tokenizers", "punkt")))
 
 # Then proceed to your pipeline setup
 stop_words = set(stopwords.words('english'))
