@@ -265,4 +265,4 @@ The Streamlit application provides:
 4. **Dashboard errors**: Verify all CSV files exist in `data/` directories
 
 **Support**: Check individual script documentation and notebook markdown cells for detailed implementation notes.
-# trigger rebuild
+# Trigger rebuild
