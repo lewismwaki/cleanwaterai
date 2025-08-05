@@ -17,7 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
 # Ensure NLTK uses a persistent path
-NLTK_PATH = os.path.join(os.getcwd(), "nltk_data")
+NLTK_PATH = os.path.join(os.path.dirname(__file__), "nltk_data")
 if NLTK_PATH not in nltk.data.path:
     nltk.data.path.append(NLTK_PATH)
 
