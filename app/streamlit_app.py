@@ -241,7 +241,8 @@ with st.container(border=True):
             st.text("")
             
         #Load data
-        df = pd.read_csv("data/environmental.csv")
+        csv_path = Path(__file__).parent / "data" / "environmental.csv"
+        df = pd.read_csv(csv_path)
         df = df.dropna(subset=["latitude", "longitude"])
         df.dropna(axis=1, how="all", inplace=True)
 
