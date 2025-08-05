@@ -16,31 +16,28 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-#import sklearn
-#print("✅ Scikit-learn version in Streamlit app:", sklearn.__version__)
-
 # Download necessary NLTK resources
 try:
     nltk.data.find('tokenizers/punkt')
 except LookupError:
-    nltk.download('punkt', quiet=True)
+    nltk.download('punkt', download_dir=nltk.data.path[0])
 
 try:
     nltk.data.find('corpora/stopwords')
 except LookupError:
-    nltk.download('stopwords', quiet=True)
+    nltk.download('stopwords', download_dir=nltk.data.path[0])
 
 try:
     nltk.data.find('corpora/wordnet')
 except LookupError:
-    nltk.download('wordnet', quiet=True)
+    nltk.download('wordnet', download_dir=nltk.data.path[0])
 
 try:
     nltk.data.find('corpora/omw-1.4')
 except LookupError:
-    nltk.download('omw-1.4', quiet=True)
+    nltk.download('omw-1.4', download_dir=nltk.data.path[0])
 
-# Dependent functions for the nlp_pipeline
+# Then proceed to your pipeline setup
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
 
