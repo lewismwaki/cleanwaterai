@@ -387,10 +387,12 @@ with st.container(border=True):
                     with detail_col1:
                         st.metric("Quality Score", f"{point_data.get('quality_score', 'N/A')}/100")
                         st.text(f"Risk Level: {point_data.get('risk_level', 'Unknown')}")
+                        st.text(f"Local Population: {point_data.get('local_population', 'N/A')}")
 
                     with detail_col2:
                         st.text(f"Contamination: {point_data.get('contamination_type', 'Not available')}")
                         st.text(f"Location: {point_data['latitude']:.4f}, {point_data['longitude']:.4f}")
+                        st.text(f"Served Population: {point_data.get('served_population', 'N/A')}")
 
                     st.text("")
                     st.text("")
