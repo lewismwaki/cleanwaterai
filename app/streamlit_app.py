@@ -253,7 +253,7 @@ with st.container(border=True):
     
     header_cols = st.columns([.5, 10, .5]) 
     with header_cols[1]:
-        st.header("🗺️ Water Contamination Risk Map")
+        st.header("🗺️ Water Point Contamination Risk Map")
         st.text("Explore water quality risks in your area")
     
     st.text("")  
