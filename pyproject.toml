@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cleanwaterai"
+version = "0.1.0"
+description = "AI-powered water quality prediction system"
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+]
+dependencies = [
+    "streamlit",
+    "scikit-learn",
+    "pandas",
+    "numpy",
+    "joblib",
+    "pydeck",
+    "matplotlib",
+    "seaborn",
+    "nltk",
+    "imbalanced-learn",
+    "xgboost",
+    "jupyter",
+    "ipykernel",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "flake8",
+    "mypy",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["scripts*", "app*", "models*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md", "*.yml", "*.yaml"]
