@@ -191,12 +191,10 @@ with col2:
         most_common_risk = filtered_df["risk_score"].mode().iloc[0]
         trend = "↗️ Slight increase"  # Optional: Replace with real trend logic later
 
-        # Show stats
-        st.text(f"Monitoring Stations: {num_stations} active")
-        st.text("")
-        st.text("Current Status:")
         # Risk score summary
         st.subheader(f"{selected_location} Risk Score Summary")
+        st.text(f"Monitoring Stations: {num_stations} active")
+        st.text("")
         risk_counts_raw = filtered_df["risk_score"].value_counts().sort_index()
         for score, count in risk_counts_raw.items():
             label = risk_labels.get(score, f"Risk {score}")
