@@ -197,17 +197,19 @@ with col2:
         st.text("Current Status:")
         # Risk score summary
         st.subheader(f"{selected_location} Risk Score Summary")
-        risk_counts = filtered_df["risk_score"].value_counts().sort_index()
-        for score, count in risk_counts.items():
+        risk_counts_raw = filtered_df["risk_score"].value_counts().sort_index()
+        for score, count in risk_counts_raw.items():
             label = risk_labels.get(score, f"Risk {score}")
             st.text(f"{label}: {count}")
 
-        # Ensure risk counts are sorted by risk level
+        # Sort and drop zero-counts for pie chart
         risk_counts = filtered_df["risk_score"].value_counts().reindex([0, 1, 2, 3], fill_value=0)
+        risk_counts = risk_counts[risk_counts > 0]  # Only keep non-zero risk levels
 
-        # Prepare labels and colors
+        # Prepare labels and colors (only for present scores)
         labels = [risk_labels.get(score) for score in risk_counts.index]
-        colors = ['green', 'gold', 'orange', 'red']  # match emojis
+        color_map = {0: 'green', 1: 'gold', 2: 'orange', 3: 'red'}
+        colors = [color_map[score] for score in risk_counts.index]
 
         # Create pie chart
         fig, ax = plt.subplots()
