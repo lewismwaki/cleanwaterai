@@ -202,15 +202,20 @@ with col2:
             label = risk_labels.get(score, f"Risk {score}")
             st.text(f"{label}: {count}")
 
-        # Pie chart of risk scores
+        # Ensure risk counts are sorted by risk level
+        risk_counts = filtered_df["risk_score"].value_counts().reindex([0, 1, 2, 3], fill_value=0)
+
+        # Prepare labels and colors
+        labels = [risk_labels.get(score) for score in risk_counts.index]
+        colors = ['green', 'gold', 'orange', 'red']  # match emojis
+
+        # Create pie chart
         fig, ax = plt.subplots()
-        labels = [risk_labels.get(score, f"Risk {score}") for score in risk_counts.index]
-        colors = ['green', 'gold', 'orange', 'red']  # optional: match risk levels visually
         ax.pie(risk_counts, labels=labels, autopct="%1.1f%%", startangle=90, colors=colors)
-        ax.axis("equal")  # Make it a perfect circle
+        ax.axis("equal")  # Make the pie chart circular
 
         st.pyplot(fig)
-        
+
 with col3:
     with st.container():
         st.subheader("Latest Alerts")
