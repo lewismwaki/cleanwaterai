@@ -455,166 +455,166 @@ elif page == "Water Point Data Analysis":
     st.write("Explore and analyze water point datasets.")
 
     data_cols = st.columns([.5, 10, .5])
-with data_cols[1]:
-    st.text("Showing the most recent water point data with model-predicted risk levels")
-    st.text("Last updated: August 3, 2025")
-    st.text("")
+    with data_cols[1]:
+        st.text("Showing the most recent water point data with model-predicted risk levels")
+        st.text("Last updated: August 3, 2025")
+        st.text("")
 
-    with st.container(border=True):
-        data_tab1, data_tab2, data_tab3, data_tab4 = st.tabs(["All Data", "Functional Status", "Risk Analysis", "Quality Trend"])
-        
-        # TAB 1: ALL DATA
-        with data_tab1:
-            st.dataframe(
-                df,
-                column_config={
-                    "water_point_id": "Water Point ID",
-                    "country_name": "Country",
-                    "region": "Region",
-                    "district": "District",
-                    "water_source": "Water Source",
-                    "status": st.column_config.SelectboxColumn(
-                        "Status",
-                        help="Operational status of the water point",
-                        width="medium",
-                        options=[
-                            "Functional",
-                            "Non-functional",
-                            "Needs repair"
-                        ]
-                    ),
-                    "date_installed": st.column_config.DateColumn(
-                        "Installation Date",
-                        format="MMM DD, YYYY",
-                    ),
-                    "latest_record": st.column_config.DateColumn(
-                        "Last Updated",
-                        format="MMM DD, YYYY",
-                    ),
-                    "water_quality": "Water Quality",
-                    "risk_score": st.column_config.ProgressColumn(
-                        "Risk Score",
-                        help="Higher score = lower risk",
-                        format="%d",
-                        min_value=0,
-                        max_value=100,
-                    ),
-                    "risk_level": "Risk Level"
-                },
-                hide_index=True,
-                use_container_width=True
-            )
-
-        # TAB 2: FUNCTIONAL STATUS
-        def clean_status(status):
-            status = status.strip().lower()
-
-            if "non-functional" in status:
-                return "Non-Functional"
-            elif "functional" in status:
-                return "Functional"
-            elif "abandoned" in status or "decommissioned" in status:
-                return "Decommissioned"
-            else:
-                return "Unknown"
-
-        df['status_clean'] = df['status_clean'].fillna("Unknown").apply(clean_status)
-
-        with data_tab2:
-            status_counts = df['status_clean'].value_counts().reset_index()
-            status_counts.columns = ['Status', 'Count']
-
+        with st.container(border=True):
+            data_tab1, data_tab2, data_tab3, data_tab4 = st.tabs(["All Data", "Functional Status", "Risk Analysis", "Quality Trend"])
             
-            st.bar_chart(status_counts, x='Status', y='Count')
-            
-            st.text("Filter data by status:")
-            status_filter = st.multiselect(
-                "Select status to view:",
-                options=df['status_clean'].unique(),
-                default=df['status_clean'].unique()
-            )
-            
-            filtered_status_data = df[df['status_clean'].isin(status_filter)]
-            st.dataframe(filtered_status_data, hide_index=True, use_container_width=True)
+            # TAB 1: ALL DATA
+            with data_tab1:
+                st.dataframe(
+                    df,
+                    column_config={
+                        "water_point_id": "Water Point ID",
+                        "country_name": "Country",
+                        "region": "Region",
+                        "district": "District",
+                        "water_source": "Water Source",
+                        "status": st.column_config.SelectboxColumn(
+                            "Status",
+                            help="Operational status of the water point",
+                            width="medium",
+                            options=[
+                                "Functional",
+                                "Non-functional",
+                                "Needs repair"
+                            ]
+                        ),
+                        "date_installed": st.column_config.DateColumn(
+                            "Installation Date",
+                            format="MMM DD, YYYY",
+                        ),
+                        "latest_record": st.column_config.DateColumn(
+                            "Last Updated",
+                            format="MMM DD, YYYY",
+                        ),
+                        "water_quality": "Water Quality",
+                        "risk_score": st.column_config.ProgressColumn(
+                            "Risk Score",
+                            help="Higher score = lower risk",
+                            format="%d",
+                            min_value=0,
+                            max_value=100,
+                        ),
+                        "risk_level": "Risk Level"
+                    },
+                    hide_index=True,
+                    use_container_width=True
+                )
 
-        # TAB 3: RISK ANALYSIS
-        with data_tab3:
-            risk_counts = df['risk_level'].value_counts().reset_index()
-            risk_counts.columns = ['Risk Level', 'Count']
+            # TAB 2: FUNCTIONAL STATUS
+            def clean_status(status):
+                status = status.strip().lower()
 
-            st.text("Average Risk Score by Region")
-            region_risk = df.groupby('clean_adm1')['risk_score'].mean().reset_index()
-            region_risk.columns = ['Region', 'Average Risk Score']
+                if "non-functional" in status:
+                    return "Non-Functional"
+                elif "functional" in status:
+                    return "Functional"
+                elif "abandoned" in status or "decommissioned" in status:
+                    return "Decommissioned"
+                else:
+                    return "Unknown"
 
-            st.bar_chart(region_risk, x='Region', y='Average Risk Score')
+            df['status_clean'] = df['status_clean'].fillna("Unknown").apply(clean_status)
 
-            st.text("Filter data by risk level:")
-            risk_filter = st.multiselect(
-                "Select risk level to view:",
-                options=df['risk_level'].unique(),
-                default=df['risk_level'].unique()
-            )
+            with data_tab2:
+                status_counts = df['status_clean'].value_counts().reset_index()
+                status_counts.columns = ['Status', 'Count']
 
-            filtered_risk_data = df[df['risk_level'].isin(risk_filter)]
-            st.dataframe(filtered_risk_data, hide_index=True, use_container_width=True)
+                
+                st.bar_chart(status_counts, x='Status', y='Count')
+                
+                st.text("Filter data by status:")
+                status_filter = st.multiselect(
+                    "Select status to view:",
+                    options=df['status_clean'].unique(),
+                    default=df['status_clean'].unique()
+                )
+                
+                filtered_status_data = df[df['status_clean'].isin(status_filter)]
+                st.dataframe(filtered_status_data, hide_index=True, use_container_width=True)
 
-        # TAB 4: QUALITY TREND
-        with data_tab4:
-            st.text("Water Quality Trend Over Time")
-            st.text("")
+            # TAB 3: RISK ANALYSIS
+            with data_tab3:
+                risk_counts = df['risk_level'].value_counts().reset_index()
+                risk_counts.columns = ['Risk Level', 'Count']
 
-            # ✅ Step 1: Define the new column (do this outside any widget)
-            df['point_id'] = df['location_name'].fillna('Unnamed') + ' (' + df['latitude'].astype(str) + ', ' + df['longitude'].astype(str) + ')'
+                st.text("Average Risk Score by Region")
+                region_risk = df.groupby('clean_adm1')['risk_score'].mean().reset_index()
+                region_risk.columns = ['Region', 'Average Risk Score']
 
-            # ✅ Step 2: Use it in the selectbox
-            selected_water_point = st.selectbox(
-                "Select a water point to view quality trend:",
-                options=df['point_id'].tolist()
-            )
+                st.bar_chart(region_risk, x='Region', y='Average Risk Score')
 
+                st.text("Filter data by risk level:")
+                risk_filter = st.multiselect(
+                    "Select risk level to view:",
+                    options=df['risk_level'].unique(),
+                    default=df['risk_level'].unique()
+                )
 
-            if selected_water_point:
-                point_data = df[df['point_id'] == selected_water_point].iloc[0]
+                filtered_risk_data = df[df['risk_level'].isin(risk_filter)]
+                st.dataframe(filtered_risk_data, hide_index=True, use_container_width=True)
 
-                st.text(f"30-day quality trend for {selected_water_point}")
+            # TAB 4: QUALITY TREND
+            with data_tab4:
+                st.text("Water Quality Trend Over Time")
                 st.text("")
 
-                days = 30
-                dates = pd.date_range(end=pd.Timestamp.now(), periods=days)
+                # ✅ Step 1: Define the new column (do this outside any widget)
+                df['point_id'] = df['location_name'].fillna('Unnamed') + ' (' + df['latitude'].astype(str) + ', ' + df['longitude'].astype(str) + ')'
 
-                base_quality = point_data['risk_score']
-                noise = np.random.normal(0, 5, days)
-                trend = np.linspace(-10, 10, days)
+                # ✅ Step 2: Use it in the selectbox
+                selected_water_point = st.selectbox(
+                    "Select a water point to view quality trend:",
+                    options=df['point_id'].tolist()
+                )
 
-                quality_trend = np.clip(base_quality + trend + noise, 0, 100)
 
-                trend_data = pd.DataFrame({
-                    'date': dates,
-                    'quality': quality_trend
-                })
+                if selected_water_point:
+                    point_data = df[df['point_id'] == selected_water_point].iloc[0]
 
-                st.line_chart(trend_data.set_index('date'))
+                    st.text(f"30-day quality trend for {selected_water_point}")
+                    st.text("")
 
-                avg_quality = quality_trend.mean()
-                st.text(f"Average Quality Score: {avg_quality:.1f}/100")
+                    days = 30
+                    dates = pd.date_range(end=pd.Timestamp.now(), periods=days)
 
-                if trend[-1] > trend[0]:
-                    st.text("Trend: ↗️ Improving")
-                elif trend[-1] < trend[0]:
-                    st.text("Trend: ↘️ Declining")
-                else:
-                    st.text("Trend: → Stable")
+                    base_quality = point_data['risk_score']
+                    noise = np.random.normal(0, 5, days)
+                    trend = np.linspace(-10, 10, days)
 
-        # CSV download
-        csv = df.to_csv(index=False)
-        st.download_button(
-            label="Download Full Water Data (CSV)",
-            data=csv,
-            file_name="cleanwat_ai_water_data.csv",
-            mime="text/csv"
-        )
+                    quality_trend = np.clip(base_quality + trend + noise, 0, 100)
 
-        st.text("")
-        st.text("")
-        with st.container(border=True):
-            st.caption("© 2025 CleanWaterAI. Data sourced from WPDx and other public datasets.")
+                    trend_data = pd.DataFrame({
+                        'date': dates,
+                        'quality': quality_trend
+                    })
+
+                    st.line_chart(trend_data.set_index('date'))
+
+                    avg_quality = quality_trend.mean()
+                    st.text(f"Average Quality Score: {avg_quality:.1f}/100")
+
+                    if trend[-1] > trend[0]:
+                        st.text("Trend: ↗️ Improving")
+                    elif trend[-1] < trend[0]:
+                        st.text("Trend: ↘️ Declining")
+                    else:
+                        st.text("Trend: → Stable")
+
+            # CSV download
+            csv = df.to_csv(index=False)
+            st.download_button(
+                label="Download Full Water Data (CSV)",
+                data=csv,
+                file_name="cleanwat_ai_water_data.csv",
+                mime="text/csv"
+            )
+
+            st.text("")
+            st.text("")
+            with st.container(border=True):
+                st.caption("© 2025 CleanWaterAI. Data sourced from WPDx and other public datasets.")
