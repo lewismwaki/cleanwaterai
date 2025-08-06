@@ -460,7 +460,7 @@ with st.container(border=True):
     st.markdown("<br>", unsafe_allow_html=True)
 
 # 📊 Latest Public Water Data Section
-st.header("📊 Latest Public Water Data")
+st.header("📊 Latest Public Water Point Data")
 data_cols = st.columns([.5, 10, .5])
 with data_cols[1]:
     st.text("Showing the most recent water point data with model-predicted risk levels")
